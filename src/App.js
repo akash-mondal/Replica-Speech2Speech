@@ -147,7 +147,7 @@ const App = () => {
             await generateAudio(response.text, ELEVENLABS_API_KEY, audioRef, analyserRef, setStarSpeed);
         } catch (error) {
             console.error("Error during transcription:", error);
-            setError("An error occurred during processing. Please try again.");
+            setError("");
             setIsPlaying(false);
         }
     };

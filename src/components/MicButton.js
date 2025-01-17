@@ -1,14 +1,15 @@
 import React from "react";
-import { FaPhoneAlt, FaPhoneSlash } from "react-icons/fa"; // Import call pickup and cut icons
+import { FaPhoneAlt, FaPhoneSlash } from "react-icons/fa";
 import '../styles/App.css';
 
-const MicButton = ({ isRecording, onClick }) => {
+const MicButton = ({ isRecording, onClick, disabled }) => {
   return (
-    <button
-      className={`mic-button ${isRecording ? "recording" : ""}`}
+    <button 
+      className={`mic-button ${isRecording ? "recording" : ""} ${disabled ? "disabled" : ""}`}
       onClick={onClick}
+      disabled={disabled}
     >
-      {isRecording ? <FaPhoneSlash /> : <FaPhoneAlt />} {/* Conditional icon rendering */}
+      {isRecording ? <FaPhoneSlash /> : <FaPhoneAlt />}
       <span>{isRecording ? "" : ""}</span>
     </button>
   );

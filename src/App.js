@@ -93,7 +93,7 @@ const App = () => {
         new LLMChain({
             llm: chatModel.current,
             prompt: chatPrompt.current,
-            verbose: true,
+            verbose: false,
             memory: chatPromptMemory.current,
         })
     );

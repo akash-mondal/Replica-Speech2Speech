@@ -15,13 +15,42 @@ import { BufferMemory } from "langchain/memory";
 import systemPrompt from "./memory_database/memory_management";
 import apiKeys from "./config/apiKeys";
 import { transcribeAudio, generateAudio } from "./helpers/audioHelper";
-import AiGeneratedCard from "./components/AiGeneratedCard"; // Import the card
+import AiGeneratedCard from "./components/AiGeneratedCard";
 
 grid.register();
 
+const bigBangQuotes = [
+    "Bazinga!",
+    "Penny, Penny, Penny!",
+    "It's not that I'm better than you, it's that you're worse.",
+    "I'm not crazy. My mother had me tested.",
+    "I don't need sleep, I need answers!",
+    "According to the laws of physics, anything is possible.",
+    "Soft kitty, warm kitty, little ball of fur...",
+    "Oh, sweet mother of Thor!",
+    "CHIMICHANGAS!",
+    "I'm not sure why I'm not more popular. I'm witty, I'm adorable, and I have a PhD.",
+    "I am the apex predator of the apartment.",
+    "That's my spot.",
+    "The human condition is a mystery to me.",
+    "I’ve always been a bit of a nerd.",
+    "I have a high tolerance for discomfort.",
+    "I’m a very good listener. Except when I’m not.",
+    "I have to agree, I'm pretty awesome.",
+    "I'm not ignoring you, I'm just prioritizing.",
+    "Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.",
+    "I'm a physicist. I don't have emotions.",
+    "The worst thing about being smart is that you know how dumb everyone else is.",
+    "Friendship is a sacred bond, and should be treated as such.",
+    "I'm not a role model. Unless you want to be like me.",
+    "I'm not going to argue with you about something you're wrong about.",
+    "I've seen enough to know that I'm never wrong.",
+    "I've never been so happy in my life and that's making me very uncomfortable."
+];
+
 const App = () => {
     const [isRecording, setIsRecording] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false); // New state to track audio playback
+    const [isPlaying, setIsPlaying] = useState(false); // Track audio playback
     const [loading, setLoading] = useState(true);
     const [contentVisible, setContentVisible] = useState(false);
     const [audioType] = useState("audio/webm");
@@ -98,20 +127,19 @@ const App = () => {
             const response = await chatConversationChain.current.invoke({
                 question: transcription.text,
             });
-            setIsPlaying(true); // Set audio playback state to true
+            setIsPlaying(true); // Start audio playback
             await generateAudio(response.text, ELEVENLABS_API_KEY, audioRef, analyserRef, setStarSpeed);
             audioRef.current.play();
         } catch (error) {
             console.error("Error during transcription:", error);
-            setError("");
+            setError("An error occurred during transcription. Please try again.");
         }
     };
 
     useEffect(() => {
         if (audioRef.current) {
-            // Add event listener for when audio ends
             audioRef.current.onended = () => {
-                setIsPlaying(false); // Reset audio playback state to false
+                setIsPlaying(false); // Reset after audio ends
             };
         }
     }, []);
@@ -132,11 +160,11 @@ const App = () => {
                 </div>
             ) : (
                 <div className={`app ${contentVisible ? "transition-visible" : ""}`}>
-                    <AiGeneratedCard /> {/* Add the card */}
+                    <AiGeneratedCard />
                     <StarField speed={starSpeed} />
                     <div className="content">
                         <ProfileCircle analyserRef={analyserRef} />
-                        {!isPlaying && ( // Conditionally render MicButton
+                        {!isPlaying && ( // Hide MicButton during audio playback
                             <MicButton isRecording={isRecording} onClick={toggleRecording} />
                         )}
                         <AudioVisualizer

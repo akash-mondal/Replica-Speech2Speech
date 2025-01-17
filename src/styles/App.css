@@ -241,3 +241,17 @@ body, html {
 .Btn:hover .svgContainer {
   background-color: rgba(156, 156, 156, 0.466);
 }
+
+.mic-button {
+    /* ... existing styles ... */
+}
+
+.mic-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.mic-button.disabled:hover {
+    transform: none;
+    background: initial;
+}
